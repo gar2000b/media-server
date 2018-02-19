@@ -1,6 +1,5 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8
+ADD /target/media-server.jar media-server.jar
+EXPOSE 80
 VOLUME /tmp
-ARG JAR_FILE
-ADD ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-EXPOSE 80:80
+ENTRYPOINT ["java","","-jar","media-server.jar"]

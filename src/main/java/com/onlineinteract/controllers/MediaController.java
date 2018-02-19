@@ -1,7 +1,8 @@
 package com.onlineinteract.controllers;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,11 +43,12 @@ public class MediaController {
 		List<String> files = new ArrayList<>(Arrays.asList(fileList));
 
 		for (String fileName : files) {
-			InputStream resource = MediaController.class.getResourceAsStream("/" + fileName);
-			System.out.println(resource.available());
-			byte[] data = new byte[resource.available()];
-			resource.read(data);
+			FileInputStream fis = new FileInputStream(new File("/tmp/" + fileName));
+			System.out.println(fis.available());
+			byte[] data = new byte[fis.available()];
+			fis.read(data);
 			videoStore.put(fileName, data);
+			fis.close();
 			System.out.println("*** " + fileName + "loaded...");
 		}
 
@@ -124,13 +126,11 @@ public class MediaController {
 			if ((index + bytesToRead) > end)
 				bytesToRead = end - index + 1;
 			System.out.println("*** index = " + index + " bytesToRead = " + bytesToRead);
-			// fis.read(bytesToWrite, 0, (int) bytesToRead);
-			// from index to end...
 			bytesToWrite = Arrays.copyOfRange(data, (int) index, (int) end);
 			try {
+				System.out.println("* bytes to write: " + bytesToWrite + " with length of: " + bytesToWrite.length);
 				response.getOutputStream().write(bytesToWrite);
 			} catch (IOException e) {
-				System.out.println("*** Caught exception - cleaning up.");
 				e.printStackTrace();
 				break;
 			}
@@ -138,7 +138,6 @@ public class MediaController {
 			index += bytesToRead;
 		}
 		response.flushBuffer();
-		// fis.close();
 		System.out.println("*** Stream segment complete.");
 	}
 
