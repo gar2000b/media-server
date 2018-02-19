@@ -9,7 +9,7 @@ public class MainTest {
 	@Test
 	public void fileSizeTest() {
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("bb.mp4").getFile());
+		File file = new File(classLoader.getResource("bhc2.mp4").getFile());
 		long size = file.length();
 		System.out.println(size);
 	}
